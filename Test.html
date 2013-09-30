@@ -1,0 +1,43 @@
+<script>
+// =======2-1======
+// 将 obj 置为空对象
+var obj = new object();
+
+// objRef现在是另一个对象的引用
+var objRef = obj;
+// 修改原对象的一个属性
+obj.oneProperty = true;
+
+// 我们现在看到，这个改变在两个变量中都反映了出来
+// （因为它们引用的是同一个对象）
+alert( obj.oneProperty === objRef.oneProperty );
+
+// =======2-2======
+// 创建一个数组
+var items = new Array( "one", "two", "three" );
+
+// 创建数组的一个引用
+var itemsRef = items;
+
+// 将一个元素添加到原数组中
+items.push( ""four );
+
+// 这两个数组的长度应该是一致的，
+// 因为它们指向同一个数组对象
+alert( items.length == itemsRef.length );
+
+// =======2-3======
+// 将 items 置为字符串的数组
+var items = new Array( "one", "two", "three" );
+
+// 将 itemsRef 置为 items 的引用
+var itemsRef = items;
+
+// 将 items 置为一个新对象
+items = new Array( "new", "array" );
+
+// items 和 itemsRef 现在指向不同的对象。
+// items 指向的是 new Array( "new", "array" )
+// itemsRef 指向的是 new Array( "one", "two", "three" )
+alert( items != itemsRef );
+</script>
