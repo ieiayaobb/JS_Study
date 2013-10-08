@@ -2,7 +2,7 @@
 // ======= 引用 ======
 // =======2-1 多个变量引用同一个对象=======
 // 将 obj 置为空对象
-var obj = new object();
+var obj = new Object();
 
 // objRef现在是另一个对象的引用
 var objRef = obj;
@@ -21,7 +21,7 @@ var items = new Array( "one", "two", "three" );
 var itemsRef = items;
 
 // 将一个元素添加到原数组中
-items.push( ""four );
+items.push( "four" );
 
 // 这两个数组的长度应该是一致的，
 // 因为它们指向同一个数组对象
@@ -60,6 +60,99 @@ alert( item != itemRef );
 // ======= 2-5 JavaScript中函数重载的两个例子 ======
 // 发行一条消息的简单函数
 function sendMessage(msg, obj){
+	// 如果消息和对象（的参数）都被提供
+	if ( arguments.length == 2){
+		// 给对象发送消息
+		obj.handleMsg( msg );
+	}else{// 否则，假定只提供了一条消息
+		// 那么仅显示默认的错误信息
+		alert( msg );
+	}
+}
+// 仅用一个参数调用这个函数 - 用 alert 来显示此消息
+sendMessage( "Hello, World!" );
+// 又或者我们可以将一个我们自己写好的对象传入
+// 负责用另一套办法显示信息
+sendMessage( "How are your?", {
+	handleMsg : function( msg ){
+		alert( "This is a custom message: " + msg );
+	}
+})
 
+// 一个接受任意数量参数并将其转换为数组的函数
+function makeArray(){
+	// 临时使用的数组
+	var arr = [];
+	
+	// 遍历传入的每个参数
+	for ( var i = 0; i < arguments.length; i++){
+		arr.push( arguments[i] );
+	}
+	
+	// 返回结果数组
+	return arr;
+}
+// =======2-6 显示错误信息和默认信息======
+function displayerror( msg ){
+	// 检查并确认 msg 是否 undefined
+	if( typeof msg == 'undefined' ){
+		// 如果是，则置 msg 为默认信息
+		msg = "An error occurred.";
+	}
+	
+	// 显示该消息
+	alert( msg );
+}
+// =======2-7 使用typeof 来判断对象类型的一个例子======
+// 检查我们的数字是否实际上是字符串
+if ( typeof num == "string" ){
+	// 若是，则根据这个字符串解析出整数来
+	num = parseInt( num );
+}
+
+// 检查我们的数组是否实际上是字符串
+if ( typeof arr == "string" ){
+	// 若是，则根据逗号切分出数组来
+	arr = arr.spilit(",")
+}
+// =======2-8 使用构造函数属性来判断对象的类型======
+// 检查我们的数字实际上是否为字符串
+if ( num.constructor == String){
+	// 如果是，则根据这个字符串解析出整数来
+	num = parsetInt( num );
+}
+
+// 检查我们的字符串实际上是否为数组
+if ( str.constructor == Array ){
+	// 如果是，则根据数组用逗号归并出字符串来
+	str = str.join(',');
+}
+// =======2-9 一个函数，可以用来严格维护转入函数的所有参数======
+// 用一个变量类型列表严格检查一个参数列表
+function strict( types, args ){
+	// 保证类型的数量和参数的数量相匹配
+	if ( types.length != args.length){
+		// 否则抛出一个有用的异常
+		throw "Invalid number of arguments. Expected " + types.length + ", received " + args.length + " instead.";
+	}
+
+	// 遍历所有的参数，检查它们的类型
+	for( var i = 0; i < args.length; i++){
+		if ( args[i].constructor != types[i] ){
+			throw "Invalid argument type.Expected " + types[i].name + ", received " + args[i].constructor.name + " instead.";
+		}
+	}
+}
+
+// 一个简单的函数，打印用户列表
+function userList( prefix, num, users){
+	// 保证 prefix 是字符串， num 是数字，users 是数组
+	strict( [String, Number, Array] ,arugments );
+	
+	// 遍历 'num' 个用户
+	for (var i = 0;i < num; i++){
+		//显示每个用户的信息
+		print( prefix + ": " + users[i] );
+	}
 }
 </script>
