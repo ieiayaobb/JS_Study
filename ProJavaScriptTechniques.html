@@ -155,4 +155,113 @@ function userList( prefix, num, users){
 		print( prefix + ": " + users[i] );
 	}
 }
+
+// ======= 作用域 ======
+// ======= 2-10 展示JavaScript的变量作用域的例子 ======
+// 设置全局变量 foo，并置为 "test"
+var foo = "test";
+
+// 在if块中
+if(true){
+	// 将 foo 置为 'new test'
+	// 注意：现在还在全局作用域中！
+	var foo = "new test"
+}
+// 如我们所见，现在 foo 等于 'new test' 了
+alert( foo == "new test" );
+
+// 创建一个会修改变量 foo 的新参数
+function test(){
+	var foo = "old test";
+}
+
+// 然而在调用时， foo 只在函数作用域内起作用
+test();
+
+// 这里确认了 foo 还是等于 'new test'
+alert( foo == "new test" );
+
+// ======= 2-11 JavaScript中的全局作用域和window对象 ======
+// 一个全局作用域下的变量，存储了字符串 'test'
+var test = 'test';
+
+// 你可以发现我们的全局变量和 window 对象的 test 属性是一致的
+alert( window.test == test );
+
+// ======= 闭包 =======
+// ======= 2-13 闭包如何使代码更清晰的两个例子 =======
+// 找出 ID 为 'main' 的元素
+var obj = document.getElementById("main");
+
+// 修改它的 border 样式
+obj.style.border = "1px solid red";
+
+// 初始化一个在一秒后执行的回调函数（callback）
+setTimeout(function(){
+	// 它将隐藏此对象
+	obj.style.display = 'none';
+},1000);
+
+// 一个用于延时警告信息的通用函数
+function delayedAlert( msg, time ){
+	// 初始化一个封装的回调函数
+	setTimeout(function(){
+		// 它将使用包含本函数的外围函数传入的 msg 变量
+		alert( msg );
+	},time);
+}
+
+// 用两个参数调用 delayedAlert 函数
+delayedAlert( "Welcome!", 2000 );
+
+// ======= 2-14 用闭包实现的函数 Curry 化 =======
+// 数字求和函数的函数生成器
+function addGenerator( num ){
+	// 返回一个简单的函数，求两个数字的和，其中第一个数字来自生成器
+	return function( toAdd ){
+		return num + toAdd
+	};
+}
+
+// addFive 现在包含一个接收单一参数的函数，这个函数能求得 5 加上该参数的和
+var addFive = addGenerator( 5 );
+
+// 这里我们可以看到，在传入参数为 4 时，addFive 函数的结果是 9
+alert( addFive( 4 ) == 9 );
+
+// ======= 2-15 使用匿名函数来隐藏全局作用域变量的例子 =======
+// 创建一个新的匿名函数，作为包装
+(function(){
+	// 变量原本应该是全局的
+	var msg = "Thanks for visiting!";
+	
+	// 将一个新函数绑定到全局对象
+	window.onunload = function(){
+		// 这个函数使用了"隐藏"的 msg 变量
+		alert( msg );
+	};
+	
+	// 关闭匿名函数并执行之
+})();
+
+// ======= 2-16 使用匿名函数来激发出创建多个使用闭包的函数所需的作用域
+// 一个 ID 为 main 的元素
+var obj = document.getElementById("main");
+// 用于绑定的一个数组
+var items = [ "click", "keypress" ];
+
+// 遍历数组的每个成员
+for ( var i = 0; i < items.length; i++){
+	// 使用一个自执行的匿名函数来激发作用域
+	(function(){
+		// 记住在这个作用域内的值
+		var item = items[i];
+		// 将一个函数绑定到该元素
+		obj[ "on" + item ] = function(){
+			// item 引用本 for 循环上下文所属作用域中的一个父变量
+			alert( "Thanks for your " + item );
+		}
+	})();
+}
 </script>
+
